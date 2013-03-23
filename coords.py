@@ -9,12 +9,7 @@ import gtk
 class Region:
 
     def __init__(self):
-        self.start_x = None
-        self.start_y = None
-        self.end_x = None
-        self.end_y = None
-        self.track_started = False
-        self.track_ended = False
+        self.reset()
 
     def get_width(self):
         if self.start_x is None or self.end_x is None:
@@ -27,6 +22,14 @@ class Region:
             return 0
 
         return max(self.start_y, self.end_y) - min(self.start_y, self.end_y)
+
+    def reset(self):
+        self.start_x = None
+        self.start_y = None
+        self.end_x = None
+        self.end_y = None
+        self.track_started = False
+        self.track_ended = False
 
 
 class Coords:
@@ -152,7 +155,8 @@ class Coords:
         self.height = height
 
     def reset(self, widget, data=None):
-        print 'clicked'
+        self.region.reset()
+        self.show_region(self.region)
 
     def start(self, widget, data=None):
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
