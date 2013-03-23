@@ -38,8 +38,6 @@ class Coords:
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_default_size(300,200)
 
-        self.window.add_events(gtk.gdk.MOTION_NOTIFY | gtk.gdk.BUTTON_PRESS)
-        self.window.connect("motion_notify_event", self.mouse_moved)
         self.window.connect("destroy", self.destroy)
 
         self.setup_widgets()
@@ -189,10 +187,6 @@ class Coords:
         self.end_y.set_text('%s' % region.end_y)
         self.width.set_text('%s' % region.get_width())
         self.height.set_text('%s' % region.get_height())
-
-    def mouse_moved(self, widget, data=None):
-        #print gtk.gdk.display_get_default().get_pointer()
-        pass
 
     def destroy(self, widget, data=None):
         gtk.main_quit()
