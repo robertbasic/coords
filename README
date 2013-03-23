@@ -1,0 +1,10 @@
+coords
+======
+
+A quick pygtk application to help determine coordinates for windows, so it's easier
+to come up with coordinates for <a href="https://git.gnome.org/browse/byzanz/">byzanz-record</a>.
+
+why?
+====
+
+For fun.
