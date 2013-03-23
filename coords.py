@@ -16,6 +16,18 @@ class Region:
         self.track_started = False
         self.track_ended = False
 
+    def get_width(self):
+        if self.start_x is None or self.end_x is None:
+            return 0
+
+        return max(self.start_x, self.end_x) - min(self.start_x, self.end_x)
+
+    def get_height(self):
+        if self.start_y is None or self.end_y is None:
+            return 0
+
+        return max(self.start_y, self.end_y) - min(self.start_y, self.end_y)
+
 
 class Coords:
 
@@ -32,6 +44,8 @@ class Coords:
         self.window.show()
 
         self.root_window = None
+
+        self.region = Region()
 
     def main(self):
         gtk.main()
@@ -128,14 +142,25 @@ class Coords:
         self.start_button = start_button
         self.start_button.connect("clicked", self.start)
 
+        reset_button.connect('clicked', self.reset)
+
+        self.start_x = start_x
+        self.start_y = start_y
+        self.end_x = end_x
+        self.end_y = end_y
+        self.width = width
+        self.height = height
+
+    def reset(self, widget, data=None):
+        print 'clicked'
+
     def start(self, widget, data=None):
-        region = Region()
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
         self.root_window = gtk.gdk.get_default_root_window()
         result = gtk.gdk.pointer_grab(self.root_window, False, mask, None, None)
-        self.root_window.add_filter(self.region, region)
+        self.root_window.add_filter(self.track_region, self.region)
 
-    def region(self, event, region):
+    def track_region(self, event, region):
         x, y, flags = event.window.get_pointer()
         if 'GDK_BUTTON1_MASK' in flags.value_names \
                 and region.track_started == False:
@@ -143,19 +168,23 @@ class Coords:
             region.start_y = y
             region.track_started = True
             region.track_ended = False
-            print 'started'
         if 'GDK_BUTTON1_MASK' not in flags.value_names \
                 and region.track_started == True:
             region.end_x = x
             region.end_y = y
             region.track_ended = True
             region.track_started = False
-            print 'ended'
-            print region.start_x
-            print region.start_y
-            print region.end_x
-            print region.end_y
+            gtk.gdk.pointer_ungrab()
+            self.show_region(region)
         return gtk.gdk.FILTER_CONTINUE
+
+    def show_region(self, region):
+        self.start_x.set_text('%s' % region.start_x)
+        self.start_y.set_text('%s' % region.start_y)
+        self.end_x.set_text('%s' % region.end_x)
+        self.end_y.set_text('%s' % region.end_y)
+        self.width.set_text('%s' % region.get_width())
+        self.height.set_text('%s' % region.get_height())
 
     def mouse_moved(self, widget, data=None):
         #print gtk.gdk.display_get_default().get_pointer()
