@@ -6,6 +6,16 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 
+class Region:
+
+    def __init__(self):
+        self.start_x = None
+        self.start_y = None
+        self.end_x = None
+        self.end_y = None
+        self.track_started = False
+        self.track_ended = False
+
 
 class Coords:
 
@@ -20,6 +30,8 @@ class Coords:
         self.setup_widgets()
 
         self.window.show()
+
+        self.root_window = None
 
     def main(self):
         gtk.main()
@@ -113,8 +125,41 @@ class Coords:
         self.window.add(main_box)
         main_box.show()
 
+        self.start_button = start_button
+        self.start_button.connect("clicked", self.start)
+
+    def start(self, widget, data=None):
+        region = Region()
+        mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+        self.root_window = gtk.gdk.get_default_root_window()
+        result = gtk.gdk.pointer_grab(self.root_window, False, mask, None, None)
+        self.root_window.add_filter(self.region, region)
+
+    def region(self, event, region):
+        x, y, flags = event.window.get_pointer()
+        if 'GDK_BUTTON1_MASK' in flags.value_names \
+                and region.track_started == False:
+            region.start_x = x
+            region.start_y = y
+            region.track_started = True
+            region.track_ended = False
+            print 'started'
+        if 'GDK_BUTTON1_MASK' not in flags.value_names \
+                and region.track_started == True:
+            region.end_x = x
+            region.end_y = y
+            region.track_ended = True
+            region.track_started = False
+            print 'ended'
+            print region.start_x
+            print region.start_y
+            print region.end_x
+            print region.end_y
+        return gtk.gdk.FILTER_CONTINUE
+
     def mouse_moved(self, widget, data=None):
-        print gtk.gdk.display_get_default().get_pointer()
+        #print gtk.gdk.display_get_default().get_pointer()
+        pass
 
     def destroy(self, widget, data=None):
         gtk.main_quit()
