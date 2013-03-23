@@ -42,7 +42,7 @@ class Coords:
 
         self.setup_widgets()
 
-        self.window.show()
+        self.window.show_all()
 
         self.root_window = None
 
@@ -109,36 +109,7 @@ class Coords:
         main_box.pack_start(hbox_five)
         main_box.pack_start(hbox_six)
         
-        start_label.show()
-        start_x_label.show()
-        start_x.show()
-        hbox_one.show()
-
-        start_y_label.show()
-        start_y.show()
-        hbox_two.show()
-
-        end_label.show()
-        end_x_label.show()
-        end_x.show()
-        hbox_three.show()
-
-        end_y_label.show()
-        end_y.show()
-        hbox_four.show()
-
-        width_label.show()
-        width.show()
-        start_button.show()
-        hbox_five.show()
-
-        height_label.show()
-        height.show()
-        reset_button.show()
-        hbox_six.show()
-
         self.window.add(main_box)
-        main_box.show()
 
         self.start_button = start_button
         self.start_button.connect("clicked", self.start)
