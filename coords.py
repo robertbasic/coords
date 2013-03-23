@@ -35,6 +35,7 @@ class Coords:
         self.window.connect("destroy", self.destroy)
 
         self.setup_widgets()
+        self.setup_crosshair_cursor()
 
         self.window.show_all()
 
@@ -101,6 +102,9 @@ class Coords:
         self.width = width
         self.height = height
 
+    def setup_crosshair_cursor(self):
+        self.crosshair_cursor = gtk.gdk.Cursor(gtk.gdk.CROSSHAIR)
+
     def reset(self, widget, data=None):
         self.region.reset()
         self.show_region(self.region)
@@ -108,7 +112,7 @@ class Coords:
     def start(self, widget, data=None):
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
         self.root_window = gtk.gdk.get_default_root_window()
-        result = gtk.gdk.pointer_grab(self.root_window, False, mask, None, None)
+        result = gtk.gdk.pointer_grab(self.root_window, False, mask, None, self.crosshair_cursor)
         self.root_window.add_filter(self.track_region, self.region)
 
     def track_region(self, event, region):
