@@ -12,22 +12,16 @@ class Region:
         self.reset()
 
     def get_width(self):
-        if self.start_x is None or self.end_x is None:
-            return 0
-
         return max(self.start_x, self.end_x) - min(self.start_x, self.end_x)
 
     def get_height(self):
-        if self.start_y is None or self.end_y is None:
-            return 0
-
         return max(self.start_y, self.end_y) - min(self.start_y, self.end_y)
 
     def reset(self):
-        self.start_x = None
-        self.start_y = None
-        self.end_x = None
-        self.end_y = None
+        self.start_x = 0
+        self.start_y = 0
+        self.end_x = 0
+        self.end_y = 0
         self.track_started = False
         self.track_ended = False
 
@@ -55,20 +49,20 @@ class Coords:
         start_label = gtk.Label("start")
         start_x_label = gtk.Label("x")
         start_y_label = gtk.Label("y")
-        start_x = gtk.Label("this will be x")
-        start_y = gtk.Label("this will be y")
+        start_x = gtk.Label("0")
+        start_y = gtk.Label("0")
 
         end_label = gtk.Label("end")
         end_x_label = gtk.Label("x")
         end_y_label = gtk.Label("y")
-        end_x = gtk.Label("this will be x")
-        end_y = gtk.Label("this will be y")
+        end_x = gtk.Label("0")
+        end_y = gtk.Label("0")
 
         width_label = gtk.Label("width")
-        width = gtk.Label("this will be w")
+        width = gtk.Label("0")
 
         height_label = gtk.Label("height")
-        height = gtk.Label("this will be h")
+        height = gtk.Label("0")
 
         start_button = gtk.Button("track")
         reset_button = gtk.Button("reset")
