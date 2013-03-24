@@ -112,10 +112,16 @@ class Coords:
     def start_tracking(self, widget, data=None):
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
         self.root_window = gtk.gdk.get_default_root_window()
+        # grabs the pointer on the root window for the mask events
+        # don't forget to ungrab the pointer later on otherwise uh-oh!
         gtk.gdk.pointer_grab(self.root_window, False, mask, None, self.crosshair_cursor)
+        # listening to events from x11 before they get to gtk
+        # or something like that
         self.root_window.add_filter(self.track_region, self.region)
 
     def track_region(self, event, region):
+        # i think event is always gtk.gdk.NOTHING
+        # but somehow it... works. don't know why or how
         x, y, flags = event.window.get_pointer()
         if 'GDK_BUTTON1_MASK' in flags.value_names \
                 and region.track_started == False:
@@ -129,8 +135,10 @@ class Coords:
             region.end_y = y
             region.track_ended = True
             region.track_started = False
+            # ungrab the pointer so we get control back
             gtk.gdk.pointer_ungrab()
             self.show_region_values(region)
+        # let the event bubble up to gtk
         return gtk.gdk.FILTER_CONTINUE
 
     def show_region_values(self, region):
