@@ -13,3 +13,8 @@ example
 =======
 
 ![example](coords.gif)
+
+license
+=======
+
+MIT. See LICENSE.
