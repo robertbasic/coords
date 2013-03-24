@@ -91,7 +91,7 @@ class Coords:
         self.window.add(table)
 
         self.start_button = start_button
-        self.start_button.connect("clicked", self.start)
+        self.start_button.connect("clicked", self.start_tracking)
 
         reset_button.connect('clicked', self.reset)
 
@@ -107,9 +107,9 @@ class Coords:
 
     def reset(self, widget, data=None):
         self.region.reset()
-        self.show_region(self.region)
+        self.show_region_values(self.region)
 
-    def start(self, widget, data=None):
+    def start_tracking(self, widget, data=None):
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
         self.root_window = gtk.gdk.get_default_root_window()
         gtk.gdk.pointer_grab(self.root_window, False, mask, None, self.crosshair_cursor)
@@ -130,10 +130,10 @@ class Coords:
             region.track_ended = True
             region.track_started = False
             gtk.gdk.pointer_ungrab()
-            self.show_region(region)
+            self.show_region_values(region)
         return gtk.gdk.FILTER_CONTINUE
 
-    def show_region(self, region):
+    def show_region_values(self, region):
         self.start_x.set_text('%s' % region.start_x)
         self.start_y.set_text('%s' % region.start_y)
         self.end_x.set_text('%s' % region.end_x)
