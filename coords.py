@@ -112,7 +112,7 @@ class Coords:
     def start(self, widget, data=None):
         mask = gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
         self.root_window = gtk.gdk.get_default_root_window()
-        result = gtk.gdk.pointer_grab(self.root_window, False, mask, None, self.crosshair_cursor)
+        gtk.gdk.pointer_grab(self.root_window, False, mask, None, self.crosshair_cursor)
         self.root_window.add_filter(self.track_region, self.region)
 
     def track_region(self, event, region):
